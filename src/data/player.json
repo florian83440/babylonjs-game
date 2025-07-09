@@ -1,0 +1,62 @@
+{
+  "player": {
+    "id": "player1",
+    "name": "Hero",
+    "position": {
+      "x": 1,
+      "y": 0.5,
+      "z": 1
+    },
+    "stats": {
+      "level": 1,
+      "hp": 100,
+      "maxHp": 100,
+      "mana": 50,
+      "maxMana": 50,
+      "strength": 10,
+      "intelligence": 8,
+      "agility": 7,
+      "defense": 5,
+      "speed": 6
+    },
+    "inventory": {
+      "gold": 100,
+      "items": [
+        {
+          "id": "potion_hp",
+          "name": "Health Potion",
+          "type": "consumable",
+          "effect": {
+            "hp": 30
+          },
+          "quantity": 3
+        },
+        {
+          "id": "potion_mana",
+          "name": "Mana Potion",
+          "type": "consumable",
+          "effect": {
+            "mana": 20
+          },
+          "quantity": 2
+        }
+      ]
+    },
+    "spells": [
+      {
+        "id": "fireball",
+        "name": "Fireball",
+        "manaCost": 10,
+        "damage": 25,
+        "type": "fire"
+      },
+      {
+        "id": "ice_shard",
+        "name": "Ice Shard",
+        "manaCost": 8,
+        "damage": 18,
+        "type": "ice"
+      }
+    ]
+  }
+}
