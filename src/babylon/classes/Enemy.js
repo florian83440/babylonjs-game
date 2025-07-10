@@ -2,9 +2,10 @@ import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
 
 export class Enemy {
-  constructor(scene, position, guiTexture) {
-    this.hp = 100;
-    this.maxHp = 100;
+  constructor(scene, position, guiTexture, maxHp, currentHp, movementPattern) {
+    this.scene = scene;
+    this.hp = currentHp;
+    this.maxHp = maxHp;
 
     // Création du mesh (box rouge)
     this.mesh = BABYLON.MeshBuilder.CreateBox("enemyBox", { size: 1 }, scene);
@@ -41,6 +42,84 @@ export class Enemy {
 
     // Permet d'accéder directement à la position
     this.position = this.mesh.position;
+
+    this.movementPattern = movementPattern;
+    this.currentStep = 0;
+    this.isMoving = false;
+  }
+
+  _moveNextStep() {
+    if (!this.isMoving || !this.movementPattern || this.movementPattern.length === 0) return;
+
+    const step = this.movementPattern[this.currentStep];
+    const moveAmount = step.distance ?? 1;
+
+    const startPosition = this.mesh.position.clone();
+    const endPosition = startPosition.clone();
+
+    switch (step.direction) {
+      case "left":
+        endPosition.x -= moveAmount;
+        break;
+      case "right":
+        endPosition.x += moveAmount;
+        break;
+      case "top":
+        endPosition.z -= moveAmount;
+        break;
+      case "bottom":
+        endPosition.z += moveAmount;
+        break;
+      default:
+        console.warn(`Unknown direction: ${step.direction}`);
+        break;
+    }
+
+    // Create the animation
+    const animation = new BABYLON.Animation(
+      "moveAnim",
+      "position",
+      60, // FPS
+      BABYLON.Animation.ANIMATIONTYPE_VECTOR3,
+      BABYLON.Animation.ANIMATIONLOOPMODE_CONSTANT
+    );
+
+    const keys = [
+      { frame: 0, value: startPosition },
+      { frame: 60, value: endPosition },
+    ];
+
+    animation.setKeys(keys);
+
+    // Optional easing for smooth effect
+    const easing = new BABYLON.CubicEase();
+    easing.setEasingMode(BABYLON.EasingFunction.EASINGMODE_EASEINOUT);
+    animation.setEasingFunction(easing);
+
+    this.mesh.animations = [];
+    this.mesh.animations.push(animation);
+
+    this.scene.beginAnimation(this.mesh, 0, 60, false, 1, () => {
+      // After animation, go to next step
+      this.currentStep = (this.currentStep + 1) % this.movementPattern.length;
+      this._movementTimeout = setTimeout(() => {
+        this._moveNextStep();
+      }, 0); // immediate next move
+    });
+  }
+
+  startPattern() {
+    if (this.isMoving) return;
+    this.isMoving = true;
+    this._moveNextStep();
+  }
+
+  stopPattern() {
+    this.isMoving = false;
+    if (this._movementTimeout) {
+      clearTimeout(this._movementTimeout);
+      this._movementTimeout = null;
+    }
   }
 
   damage(amount) {

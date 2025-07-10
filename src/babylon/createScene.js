@@ -1,11 +1,17 @@
 import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
+
 import { createHPBar } from "./gui/healthBar";
 import { createManaBar } from "./gui/manaBar";
 import { createInventoryUI } from "@/babylon/gui/inventory.js";
+
 import { Spell } from "@/babylon/classes/Spell.js";
-import { getLastDirection, updateDirectionFromKey } from "@/babylon/physics/direction.js";
+import { getLastDirection } from "@/babylon/physics/direction.js";
 import { Enemy } from "@/babylon/classes/Enemy.js";
+import { Player } from "@/babylon/classes/Player.js";
+
+import { generateGround } from "./setup/generateGround";
+import { setupCamera } from "./setup/setupCamera";
 
 export function createScene(engine, canvas) {
   const scene = new BABYLON.Scene(engine);
@@ -15,72 +21,17 @@ export function createScene(engine, canvas) {
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 2, 0), scene);
   light.intensity = 0.7;
 
-  const baseGround = BABYLON.MeshBuilder.CreateGround("base", { width: 10, height: 10 }, scene);
-  baseGround.isVisible = false;
+  // Ground
+  generateGround(scene, mapSize, offset);
 
-  const size = 1;
-  for (let x = 0; x < mapSize / 2; x++) {
-    for (let z = 0; z < mapSize / 2; z++) {
-      const tile = BABYLON.MeshBuilder.CreateGround(
-        `tile_${x}_${z}`,
-        { width: size, height: size },
-        scene
-      );
-      tile.position.x = x - offset + 0.5;
-      tile.position.z = z - offset + 0.5;
+  // Player
+  const player = new Player(scene, mapSize, offset);
+  const playerMesh = player.getMesh();
 
-      const mat = new BABYLON.StandardMaterial(`mat_${x}_${z}`, scene);
-      mat.diffuseColor = new BABYLON.Color3(0.1, 0.65, 0.1);
-      tile.material = mat;
+  // Camera
+  setupCamera(scene, canvas, playerMesh);
 
-      const lines = BABYLON.MeshBuilder.CreateLines(
-        `border_${x}_${z}`,
-        {
-          points: [
-            new BABYLON.Vector3(tile.position.x - 0.5, 0.01, tile.position.z - 0.5),
-            new BABYLON.Vector3(tile.position.x + 0.5, 0.01, tile.position.z - 0.5),
-            new BABYLON.Vector3(tile.position.x + 0.5, 0.01, tile.position.z + 0.5),
-          ],
-        },
-        scene
-      );
-
-      const lineMaterial = new BABYLON.StandardMaterial(`lineMat_${x}_${z}`, scene);
-      lineMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
-      lineMaterial.alpha = 0.05;
-      lines.material = lineMaterial;
-    }
-  }
-
-  const box = BABYLON.MeshBuilder.CreateBox("box", { width: 1, height: 1, depth: 1 }, scene);
-  const tileX = 1;
-  const tileZ = 1;
-  box.position.set(tileX - offset + 0.5, 0.5, tileZ - offset + 0.5);
-  let playerX = tileX,
-    playerZ = tileZ;
-
-  window.addEventListener("keydown", (e) => {
-    const pos = updateDirectionFromKey(e.key, { x: playerX, z: playerZ }, mapSize);
-    playerX = pos.x;
-    playerZ = pos.z;
-    box.position.x = playerX - offset + 0.5;
-    box.position.z = playerZ - offset + 0.5;
-  });
-
-  const camera = new BABYLON.ArcRotateCamera(
-    "camera",
-    -Math.PI / 2,
-    Math.PI / 3,
-    20,
-    box.position,
-    scene
-  );
-  camera.attachControl(canvas, true);
-  camera.inputs.clear();
-  scene.registerBeforeRender(() => {
-    camera.target = box.position;
-  });
-
+  // GUI
   const guiTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
   createHPBar(guiTexture);
   createManaBar(guiTexture);
@@ -89,10 +40,17 @@ export function createScene(engine, canvas) {
     console.log(`Used item from inventory: ${item.name}`);
   });
 
-  const enemy = new Enemy(scene, new BABYLON.Vector3(0.5, 0.5, 0.5), guiTexture);
+  // Enemies
+  const enemy1 = new Enemy(scene, new BABYLON.Vector3(0.5, 0.5, 0.5), guiTexture, 100, 100, [
+    { direction: "left", delay: 1000, distance: 2 },
+    { direction: "top", delay: 1000, distance: 1 },
+    { direction: "right", delay: 1000, distance: 2 },
+    { direction: "bottom", delay: 1000, distance: 1 },
+  ]);
+  enemy1.damage(30);
+  enemy1.startPattern();
 
-  enemy.damage(30);
-
+  // Spells
   new Spell({
     id: "fireball",
     name: "Fire",
@@ -102,7 +60,7 @@ export function createScene(engine, canvas) {
     offset: "-50px",
     guiTexture,
     scene,
-    playerMesh: box,
+    playerMesh,
     direction: getLastDirection,
     cooldown: 1000,
   });
@@ -116,7 +74,7 @@ export function createScene(engine, canvas) {
     offset: "50px",
     guiTexture,
     scene,
-    playerMesh: box,
+    playerMesh,
     direction: getLastDirection,
     cooldown: 1000,
   });
