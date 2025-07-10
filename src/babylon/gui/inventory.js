@@ -1,4 +1,3 @@
-// inventory.js
 import * as GUI from "babylonjs-gui";
 import playerData from "/src/data/player.json";
 
