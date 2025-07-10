@@ -6,12 +6,12 @@ import { createManaBar } from "./gui/manaBar";
 import { createInventoryUI } from "@/babylon/gui/inventory.js";
 
 import { Spell } from "@/babylon/classes/Spell.js";
-import { getLastDirection } from "@/babylon/physics/direction.js";
 import { Enemy } from "@/babylon/classes/Enemy.js";
 import { Player } from "@/babylon/classes/Player.js";
 
 import { generateGround } from "./setup/generateGround";
 import { setupCamera } from "./setup/setupCamera";
+import { EnemyManager } from "@/babylon/classes/EnemyManager.js";
 
 export function createScene(engine, canvas) {
   const scene = new BABYLON.Scene(engine);
@@ -25,7 +25,7 @@ export function createScene(engine, canvas) {
   generateGround(scene, mapSize, offset);
 
   // Player
-  const player = new Player(scene, mapSize, offset);
+  const player = new Player(scene, offset, mapSize/4, 1);
   const playerMesh = player.getMesh();
 
   // Camera
@@ -41,17 +41,23 @@ export function createScene(engine, canvas) {
   });
 
   // Enemies
-  const enemy1 = new Enemy(scene, new BABYLON.Vector3(0.5, 0.5, 0.5), guiTexture, 100, 100, [
-    { direction: "left", delay: 1000, distance: 2 },
-    { direction: "top", delay: 1000, distance: 1 },
-    { direction: "right", delay: 1000, distance: 2 },
-    { direction: "bottom", delay: 1000, distance: 1 },
-  ]);
-  enemy1.damage(30);
-  enemy1.startPattern();
+  const enemyManager = new EnemyManager();
+
+  const enemy1 = new Enemy(
+    scene,
+    mapSize/4,
+    0,
+    10,
+    guiTexture,
+    100,
+    100,
+    10,
+    {fire: true, ice: false, lightning: false, earth: true},
+  );
+  enemyManager.add(enemy1)
 
   // Spells
-  new Spell({
+  const fireballSpell = new Spell({
     id: "fireball",
     name: "Fire",
     type: "fire",
@@ -61,11 +67,12 @@ export function createScene(engine, canvas) {
     guiTexture,
     scene,
     playerMesh,
-    direction: getLastDirection,
     cooldown: 1000,
+    enemyManager,
+    attacker: player
   });
 
-  new Spell({
+  const iceballSpell = new Spell({
     id: "iceball",
     name: "Ice",
     type: "ice",
@@ -75,9 +82,13 @@ export function createScene(engine, canvas) {
     guiTexture,
     scene,
     playerMesh,
-    direction: getLastDirection,
     cooldown: 1000,
+    enemyManager,
+    attacker: player
   });
+
+  player.addSpell(fireballSpell);
+  player.addSpell(iceballSpell);
 
   return scene;
 }

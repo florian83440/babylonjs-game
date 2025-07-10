@@ -2,14 +2,21 @@ import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
 
 export class Enemy {
-  constructor(scene, position, guiTexture, maxHp, currentHp, movementPattern) {
+  constructor(scene, startX, startY, startZ, guiTexture, maxHp, currentHp, defense, elementalResistance, movementPattern = []) {
     this.scene = scene;
     this.hp = currentHp;
     this.maxHp = maxHp;
+    this.defense = defense;
+    this.elementalResistance = elementalResistance;
+
+    // Offset values
+    const offsetX = -4.5; // Offset from the left
+    const offsetY = 0.5; // Offset from heaven
+    const offsetZ = -4.5; // Offset from the bottom
 
     // Création du mesh (box rouge)
     this.mesh = BABYLON.MeshBuilder.CreateBox("enemyBox", { size: 1 }, scene);
-    this.mesh.position = position.clone();
+    this.mesh.position = new BABYLON.Vector3(startX + offsetX, startY + offsetY, startZ + offsetZ);
 
     const mat = new BABYLON.StandardMaterial("enemyMat", scene);
     mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
@@ -68,7 +75,7 @@ export class Enemy {
         endPosition.z -= moveAmount;
         break;
       case "bottom":
-        endPosition.z += moveAmount;
+        endPosition.z -= moveAmount;
         break;
       default:
         console.warn(`Unknown direction: ${step.direction}`);
