@@ -4,20 +4,20 @@ import { DamageCalculator } from "./DamageCalculator";
 
 export class Spell {
   constructor({
-                id,
-                name,
-                type,
-                damage,
-                manaCost,
-                color,
-                offset,
-                guiTexture,
-                scene,
-                playerMesh,
-                cooldown,
-                enemyManager,
-                attacker
-              }) {
+    id,
+    name,
+    type,
+    damage,
+    manaCost,
+    color,
+    offset,
+    guiTexture,
+    scene,
+    playerMesh,
+    cooldown,
+    enemyManager,
+    attacker,
+  }) {
     this.id = id;
     this.name = name;
     this.type = type;
@@ -31,7 +31,7 @@ export class Spell {
     this.cooldown = cooldown;
     this.enemyManager = enemyManager;
     this.targetEnemy = null;
-    this.attacker = attacker
+    this.attacker = attacker;
     this.damageCalculator = new DamageCalculator();
 
     this.createUI();
@@ -70,13 +70,10 @@ export class Spell {
         enemy.mesh.actionManager = new BABYLON.ActionManager(this.scene);
 
         enemy.mesh.actionManager.registerAction(
-          new BABYLON.ExecuteCodeAction(
-            BABYLON.ActionManager.OnPickTrigger,
-            () => {
-              this.targetEnemy = enemy;
-              this.cast();
-            }
-          )
+          new BABYLON.ExecuteCodeAction(BABYLON.ActionManager.OnPickTrigger, () => {
+            this.targetEnemy = enemy;
+            this.cast();
+          })
         );
       });
       console.log("Select a target for " + this.name);

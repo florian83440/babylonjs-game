@@ -2,7 +2,18 @@ import * as BABYLON from "babylonjs";
 import * as GUI from "babylonjs-gui";
 
 export class Enemy {
-  constructor(scene, startX, startY, startZ, guiTexture, maxHp, currentHp, defense, elementalResistance, movementPattern = []) {
+  constructor(
+    scene,
+    mapSize,
+    startY,
+    startZ,
+    guiTexture,
+    maxHp,
+    currentHp,
+    defense,
+    elementalResistance,
+    movementPattern = []
+  ) {
     this.scene = scene;
     this.hp = currentHp;
     this.maxHp = maxHp;
@@ -16,7 +27,7 @@ export class Enemy {
 
     // Création du mesh (box rouge)
     this.mesh = BABYLON.MeshBuilder.CreateBox("enemyBox", { size: 1 }, scene);
-    this.mesh.position = new BABYLON.Vector3(startX + offsetX, startY + offsetY, startZ + offsetZ);
+    this.mesh.position = new BABYLON.Vector3(mapSize/4 + offsetX, startY + offsetY, startZ + offsetZ);
 
     const mat = new BABYLON.StandardMaterial("enemyMat", scene);
     mat.diffuseColor = new BABYLON.Color3(1, 0, 0);
@@ -146,5 +157,9 @@ export class Enemy {
     this.mesh.dispose();
     this.hpBar.dispose();
     console.log("Enemy defeated");
+  }
+
+  setPositionX(x) {
+    this.mesh.position.x = x;
   }
 }

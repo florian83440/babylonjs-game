@@ -2,7 +2,6 @@ import * as BABYLON from "babylonjs";
 
 export class Player {
   constructor(scene, offset, startX = 1, startZ = 1, spells = []) {
-
     this.x = startX;
     this.z = startZ;
 
