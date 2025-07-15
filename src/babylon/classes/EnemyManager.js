@@ -29,17 +29,15 @@ export class EnemyManager {
   setpositionalEnemies() {
     const enemyPair = Math.ceil(this.enemies.length / 2);
     const offsetX = -4.5; // Offset from the left
-    const centerX = this.mapSize/this.enemies.length;
+    const centerX = this.mapSize / this.enemies.length;
     const spacing = centerX;
 
     this.enemies.forEach((enemy, index) => {
-      let offsetPair =0;
-      if (enemyPair){
-        offsetPair = -spacing/2;
-      }else{
-        offsetPair = 0
+      let offsetPair = 0;
+      if (enemyPair) {
+        offsetPair = -spacing / 2;
       }
-      enemy.mesh.position.x = centerX+offsetX + spacing*index +offsetPair; // Adjust for center
+      enemy.mesh.position.x = centerX + offsetX + spacing * index + offsetPair; // Adjust for center
     });
   }
 }

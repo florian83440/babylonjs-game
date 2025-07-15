@@ -20,5 +20,4 @@ export function createCurrentTurnInfos(guiTexture) {
   guiTexture.addControl(currentTurnInfo);
 
   return currentTurnInfo;
-
 }

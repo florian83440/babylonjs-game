@@ -27,7 +27,11 @@ export class Enemy {
 
     // Création du mesh (box rouge)
     this.mesh = BABYLON.MeshBuilder.CreateBox("enemyBox", { size: 1 }, scene);
-    this.mesh.position = new BABYLON.Vector3(mapSize/4 + offsetX, startY + offsetY, startZ + offsetZ);
+    this.mesh.position = new BABYLON.Vector3(
+      mapSize / 4 + offsetX,
+      startY + offsetY,
+      startZ + offsetZ
+    );
 
     const mat = new BABYLON.StandardMaterial("enemyMat", scene);
     mat.diffuseColor = new BABYLON.Color3(1, 0, 0);

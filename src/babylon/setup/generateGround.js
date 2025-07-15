@@ -15,7 +15,5 @@ export function generateGround(scene, mapSize, offset) {
   mat.diffuseTexture = new BABYLON.Texture("/textures/ground_mat.jpg", scene);
   ground.material = mat;
 
-
-
   return ground;
 }

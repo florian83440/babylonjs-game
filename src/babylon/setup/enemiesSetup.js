@@ -2,7 +2,7 @@ import { EnemyManager } from "@/babylon/classes/EnemyManager.js";
 import { Enemy } from "@/babylon/classes/Enemy.js";
 
 export function generateEnemies(scene, mapSize, guiTexture) {
-  const enemyManager = new EnemyManager(mapSize/2);
+  const enemyManager = new EnemyManager(mapSize / 2);
 
   const enemy1 = new Enemy(scene, mapSize, 0, 10, guiTexture, 100, 100, 10, {
     fire: true,
@@ -20,7 +20,6 @@ export function generateEnemies(scene, mapSize, guiTexture) {
   });
   enemyManager.add(enemy2);
 
-
   const enemy3 = new Enemy(scene, mapSize, 0, 10, guiTexture, 100, 100, 10, {
     fire: false,
     ice: true,
@@ -29,7 +28,7 @@ export function generateEnemies(scene, mapSize, guiTexture) {
   });
   enemyManager.add(enemy3);
 
-  enemyManager.setpositionalEnemies()
+  enemyManager.setpositionalEnemies();
 
   return enemyManager;
 }
