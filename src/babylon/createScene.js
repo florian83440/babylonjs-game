@@ -34,7 +34,9 @@ export function createScene(engine, canvas) {
   const enemyManager = generateEnemies(scene, mapSize, guiTexture);
 
   // Players
-  const players = generatePlayers(scene, mapSize, offset, guiTexture, enemyManager);
+  const playerManager = generatePlayers(scene, mapSize, offset, guiTexture, enemyManager);
+
+  const players = playerManager.getAllPlayers();
 
   const activePlayerMesh = players[0].getMesh();
 

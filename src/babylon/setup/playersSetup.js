@@ -1,42 +1,13 @@
-import * as BABYLON from "babylonjs";
 import { Player } from "@/babylon/classes/Player.js";
-import { Spell } from "@/babylon/classes/Spell.js";
+import { PlayerManager } from "@/babylon/classes/PlayerManager.js";
 
 export function generatePlayers(scene, mapSize, offset, guiTexture, enemyManager) {
-  const player = new Player(scene, offset, mapSize / 4, 1);
-  const playerMesh = player.getMesh();
-  // Spells
-  const fireballSpell = new Spell({
-    id: "fireball",
-    name: "Fire",
-    type: "fire",
-    damage: 25,
-    manaCost: 10,
-    offset: "-50px",
-    guiTexture,
-    scene,
-    playerMesh,
-    cooldown: 1000,
-    enemyManager,
-    attacker: player,
-  });
+  const playerManager = new PlayerManager()
 
-  const iceballSpell = new Spell({
-    id: "iceball",
-    name: "Ice",
-    type: "ice",
-    damage: 25,
-    manaCost: 10,
-    offset: "50px",
-    guiTexture,
-    scene,
-    playerMesh,
-    cooldown: 1000,
-    enemyManager,
-    attacker: player,
-  });
+  const player1 = new Player(scene, offset, mapSize / 4, 1, enemyManager, guiTexture, playerManager);
+  player1.setPlayerClass("Warden");
 
-  player.addSpell(fireballSpell);
-  player.addSpell(iceballSpell);
-  return [player];
+  playerManager.addPlayer(player1, player1.getMesh().id);
+
+  return playerManager;
 }

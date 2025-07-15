@@ -22,7 +22,7 @@ export function addSpellButton(guiTexture, name, leftOffset, callback, cooldown 
 
   // Overlay cooldown (barre sombre semi-transparente)
   const cooldownOverlay = new GUI.Rectangle();
-  cooldownOverlay.width = 1; // 100%
+  cooldownOverlay.width = "80px"; // Fixed width to match the button
   cooldownOverlay.height = 1;
   cooldownOverlay.background = "rgba(0, 0, 0, 0.5)";
   cooldownOverlay.isPointerBlocker = false;
@@ -65,7 +65,7 @@ export function addSpellButton(guiTexture, name, leftOffset, callback, cooldown 
 
   // Fonction pour lancer cooldown visuel (durée en ms)
   function startCooldown(duration) {
-    cooldownOverlay.width = 1;
+    cooldownOverlay.width = "80px";
     let start = performance.now();
 
     startPulseAnimation();
@@ -75,12 +75,12 @@ export function addSpellButton(guiTexture, name, leftOffset, callback, cooldown 
     const animate = () => {
       let elapsed = performance.now() - start;
       let progress = Math.min(elapsed / duration, 1);
-      cooldownOverlay.width = 1 - progress;
+      cooldownOverlay.width = (80 * (1 - progress)) + "px";
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        cooldownOverlay.width = 0;
+        cooldownOverlay.width = "0px";
         stopPulseAnimation();
         button.isEnabled = true;
         button.alpha = 1;

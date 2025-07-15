@@ -1,0 +1,161 @@
+[
+  {
+    "name": "Warden",
+    "role": "Tank / Protector",
+    "HP": 180,
+    "MP": 50,
+    "physical_attack": 40,
+    "physical_defense": 80,
+    "magical_attack": 20,
+    "magical_defense": 60,
+    "speed": 30,
+    "skills": [
+      {
+        "id": "warden_skill_1",
+        "name": "Unyielding Guard",
+        "description": "Reduces incoming damage by 50% for 1 turn.",
+        "damage": 0,
+        "element": null,
+        "type": "Physical",
+        "range": 0,
+        "manaCost": 10,
+        "allyCast": false,
+        "onlySelfCast": true,
+        "itemBuff": {
+          "defense": 20
+        }
+      },
+      {
+        "id": "warden_skill_2",
+        "name": "Taunt",
+        "description": "Forces a target enemy to attack the Warden for 2 turns.",
+        "damage": 0,
+        "element": null,
+        "type": "Physical",
+        "range": 1,
+        "manaCost": 8,
+        "allyCast": false,
+        "onlySelfCast": false
+      },
+      {
+        "id": "warden_skill_3",
+        "name": "Divine Shield",
+        "description": "Protects an ally, halving the damage they take for 1 turn.",
+        "damage": 0,
+        "element": "Earth",
+        "type": "Magical",
+        "range": 2,
+        "manaCost": 15,
+        "allyCast": true,
+        "onlySelfCast": false,
+        "itemBuff": {
+          "defense": 30
+        }
+      }
+    ]
+  },
+  {
+    "name": "Thaumaturge",
+    "role": "Magical DPS",
+    "HP": 90,
+    "MP": 160,
+    "physical_attack": 20,
+    "physical_defense": 20,
+    "magical_attack": 90,
+    "magical_defense": 40,
+    "speed": 35,
+    "skills": [
+      {
+        "id": "thaumaturge_skill_1",
+        "name": "Astral Flame",
+        "description": "Deals fire damage to a target and nearby enemies.",
+        "damage": 45,
+        "element": "Fire",
+        "type": "Magical",
+        "range": 3,
+        "manaCost": 25,
+        "allyCast": false,
+        "onlySelfCast": false
+      },
+      {
+        "id": "thaumaturge_skill_2",
+        "name": "Runic Barrier",
+        "description": "Increases the user's magical defense for 2 turns.",
+        "damage": 0,
+        "element": "Ice",
+        "type": "Magical",
+        "range": 0,
+        "manaCost": 12,
+        "allyCast": true,
+        "onlySelfCast": true,
+        "itemBuff": {
+          "magical_defense": 25
+        }
+      },
+      {
+        "id": "thaumaturge_skill_3",
+        "name": "Focused Bolt",
+        "description": "Deals heavy lightning damage to a single target.",
+        "damage": 70,
+        "element": "Lightning",
+        "type": "Magical",
+        "range": 4,
+        "manaCost": 35,
+        "allyCast": false,
+        "onlySelfCast": false
+      }
+    ]
+  },
+  {
+    "name": "Falconshot",
+    "role": "Ranged DPS / Scout",
+    "HP": 110,
+    "MP": 80,
+    "physical_attack": 70,
+    "physical_defense": 30,
+    "magical_attack": 30,
+    "magical_defense": 30,
+    "speed": 60,
+    "skills": [
+      {
+        "id": "falconshot_skill_1",
+        "name": "Piercing Shot",
+        "description": "Ignores 50% of the target's defense.",
+        "damage": 40,
+        "element": null,
+        "type": "Physical",
+        "range": 5,
+        "manaCost": 10,
+        "allyCast": false,
+        "onlySelfCast": false
+      },
+      {
+        "id": "falconshot_skill_2",
+        "name": "Hawk's Eye",
+        "description": "Increases range and accuracy for 1 turn.",
+        "damage": 0,
+        "element": null,
+        "type": "Physical",
+        "range": 0,
+        "manaCost": 5,
+        "allyCast": true,
+        "onlySelfCast": true,
+        "itemBuff": {
+          "attack": 15
+        }
+      },
+      {
+        "id": "falconshot_skill_3",
+        "name": "Reflex Shot",
+        "description": "Automatically counterattacks if attacked from range.",
+        "damage": 25,
+        "element": "Earth",
+        "type": "Physical",
+        "range": 4,
+        "manaCost": 12,
+        "allyCast": false,
+        "onlySelfCast": false
+      }
+    ]
+  }
+]
