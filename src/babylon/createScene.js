@@ -9,6 +9,7 @@ import { setupCamera } from "./setup/setupCamera";
 import { generatePlayers } from "@/babylon/setup/playersSetup.js";
 import { generateEnemies } from "@/babylon/setup/enemiesSetup.js";
 import { createCurrentTurnInfos } from "@/babylon/gui/currentTurn.js";
+import { createPlayerInfoGUI } from "@/babylon/gui/playerInfo.js";
 
 export function createScene(engine, canvas) {
   const scene = new BABYLON.Scene(engine);
@@ -18,23 +19,17 @@ export function createScene(engine, canvas) {
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 2, 0), scene);
   light.intensity = 0.7;
 
-  // GUI
-  const guiTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
-  createHPBar(guiTexture);
-  createManaBar(guiTexture);
-  createCurrentTurnInfos(guiTexture);
-  createInventoryUI(guiTexture, (item) => {
-    console.log(`Used item from inventory: ${item.name}`);
-  });
-
   // Ground
   generateGround(scene, mapSize, offset);
 
+  // GUI
+  const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("GUI", true, scene);
+
   // Enemies
-  const enemyManager = generateEnemies(scene, mapSize, guiTexture);
+  const enemyManager = generateEnemies(scene, mapSize, advancedTexture);
 
   // Players
-  const playerManager = generatePlayers(scene, mapSize, offset, guiTexture, enemyManager);
+  const playerManager = generatePlayers(scene, mapSize, offset, advancedTexture, enemyManager);
 
   const players = playerManager.getAllPlayers();
 
@@ -42,6 +37,16 @@ export function createScene(engine, canvas) {
 
   // Camera
   setupCamera(scene, canvas, activePlayerMesh);
+
+  // Create GUI elements
+  createHPBar(advancedTexture);
+  createManaBar(advancedTexture);
+
+  createCurrentTurnInfos(advancedTexture);
+
+  createInventoryUI(advancedTexture, (item) => {
+    console.log(`Used item from inventory: ${item.name}`);
+  });
 
   return scene;
 }

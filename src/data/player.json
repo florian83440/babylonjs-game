@@ -1,7 +1,7 @@
 {
   "player": {
     "id": "player1",
-    "name": "Hero",
+    "name": "Le F",
     "position": {
       "x": 1,
       "y": 0.5,
@@ -9,15 +9,13 @@
     },
     "stats": {
       "level": 1,
-      "hp": 100,
-      "maxHp": 100,
-      "mana": 50,
-      "maxMana": 50,
-      "strength": 10,
-      "intelligence": 8,
-      "agility": 7,
-      "defense": 5,
-      "speed": 6
+      "HP": 180,
+      "MP": 50,
+      "physical_attack": 10,
+      "physical_defense": 10,
+      "magical_attack": 10,
+      "magical_defense": 10,
+      "speed": 10
     },
     "inventory": {
       "gold": 100,

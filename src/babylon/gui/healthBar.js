@@ -9,7 +9,8 @@ export function createHPBar(guiTexture) {
   hpBg.thickness = 2;
   hpBg.background = "grey";
   hpBg.top = "-40px";
-  hpBg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+  hpBg.left = "15px";
+  hpBg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
   hpBg.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
 
   const hpBar = new GUI.Rectangle();
