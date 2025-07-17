@@ -22,7 +22,8 @@
     "eslint-plugin-vue": "^10.3.0",
     "eslint-scope": "^8.4.0",
     "globals": "^16.3.0",
-    "vue": "^3.5.17"
+    "vue": "^3.5.17",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "vite": "^7.0.0",

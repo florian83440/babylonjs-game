@@ -61,8 +61,6 @@ export class Spell {
   }
 
   createUI() {
-    const buttonWidth = "100px"; // Define a fixed width for the button
-
     addSpellButton(
       this.guiTexture,
       this.name,
@@ -70,8 +68,7 @@ export class Spell {
       () => {
         this.selectTarget();
       },
-      this.cooldown,
-      buttonWidth
+      this.cooldown
     );
   }
 
@@ -103,12 +100,10 @@ export class Spell {
     const allies = selfCast
       ? [this.playerManager.getPlayer(this.playerMesh.name)]
       : this.playerManager.getAllPlayers();
-    console.log(this.playerMesh.name);
     if (!allies || allies.length === 0) {
       console.log(selfCast ? "Self not available." : "No allies available.");
       return;
     }
-    console.log(allies);
     if (allies.length === 1 && selfCast) {
       this.cast(allies[0]);
       return;
@@ -146,7 +141,7 @@ export class Spell {
         const damage = this.damageCalculator.calculateDamage(this.attacker, target, this);
         target.damage(damage);
       }
-
+      this.removeMana();
       this.removeTargetSelection();
     } else {
       console.log("No target selected for " + this.name);
@@ -156,6 +151,7 @@ export class Spell {
   heal(itemBuffElement) {
     if (this.attacker && this.attacker.heal) {
       this.attacker.heal(itemBuffElement);
+      this.removeMana();
       console.log(`Healed ${this.attacker.mesh.name} for ${itemBuffElement}`);
     } else {
       console.error("Attacker does not have a heal method.");
@@ -172,5 +168,10 @@ export class Spell {
     if (ally && ally.mesh.actionManager) {
       ally.mesh.actionManager = null;
     }
+  }
+
+  //method to remove mana from player
+  removeMana() {
+    this.attacker.removeMana(10);
   }
 }
