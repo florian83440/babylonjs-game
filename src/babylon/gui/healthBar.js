@@ -1,6 +1,10 @@
 import * as GUI from "babylonjs-gui";
+import store from "@/store/index.js";
 
 export function createHPBar(guiTexture) {
+  let HP = store.state.playerStore.HP;
+  let maxHP = store.state.playerStore.maxHP;
+
   const hpBg = new GUI.Rectangle();
   hpBg.width = "200px";
   hpBg.height = "30px";
@@ -22,5 +26,38 @@ export function createHPBar(guiTexture) {
   hpBar.background = "red";
 
   hpBg.addControl(hpBar);
+
+  const healthLabel = new GUI.TextBlock();
+  healthLabel.color = "white";
+  hpBg.addControl(healthLabel);
+
   guiTexture.addControl(hpBg);
+
+  function updateHealthBar() {
+    const healthPercentage = (HP / maxHP) * 100;
+    hpBar.width = `${healthPercentage}%`;
+    healthLabel.text = `${HP}`;
+  }
+
+  // Watch HP using the getter
+  store.watch(
+    () => store.getters["playerStore/HP"],
+    (newHP) => {
+      HP = newHP;
+      updateHealthBar();
+    },
+    { immediate: true }
+  );
+
+  // Watch maxHP using the getter
+  store.watch(
+    () => store.getters["playerStore/maxHP"],
+    (newMaxHP) => {
+      maxHP = newMaxHP;
+      updateHealthBar();
+    },
+    { immediate: true }
+  );
+
+  return hpBg;
 }

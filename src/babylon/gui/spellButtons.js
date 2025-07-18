@@ -1,102 +1,47 @@
 import * as GUI from "babylonjs-gui";
 
-export function addSpellButton(guiTexture, name, leftOffset, callback, cooldown = 0) {
-  // Container pour bouton + overlay cooldown
-  const container = new GUI.StackPanel();
-  container.width = "80px";
-  container.height = "40px";
-  container.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-  container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
-  container.left = leftOffset;
-  container.top = "-100px";
-  container.isVertical = false;
-  guiTexture.addControl(container);
+/**
+ * Creates a spell bar with up to 8 buttons, centered at the bottom of the screen.
+ * @param {AdvancedDynamicTexture} guiTexture - The GUI texture to add the spell bar to.
+ * @param {SpellManager} spellManager - The manager containing the spells.
+ */
+export function setSpellsGUI(guiTexture, spellManager) {
+  // Create horizontal spell bar container
+  const spellBar = new GUI.StackPanel("spellBar");
+  spellBar.isVertical = false;
+  spellBar.height = "100px";
+  spellBar.width = "50%";
+  spellBar.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+  spellBar.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+  spellBar.paddingBottom = "20px";
+  spellBar.spacing = 10;
+  guiTexture.addControl(spellBar);
 
-  // Bouton principal
-  const button = GUI.Button.CreateSimpleButton(name, name);
-  button.width = "80px";
-  button.height = "40px";
-  button.color = "white";
-  button.background = "darkblue";
-  container.addControl(button);
+  const maxButtons = 8;
+  const displayedSpells = spellManager.spells.slice(0, maxButtons);
 
-  // Overlay cooldown (barre sombre semi-transparente)
-  const cooldownOverlay = new GUI.Rectangle();
-  cooldownOverlay.width = "80px"; // Fixed width to match the button
-  cooldownOverlay.height = 1;
-  cooldownOverlay.background = "rgba(0, 0, 0, 0.5)";
-  cooldownOverlay.isPointerBlocker = false;
-  cooldownOverlay.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
-  cooldownOverlay.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
-  container.addControl(cooldownOverlay);
+  displayedSpells.forEach((spell, index) => {
+    const button = GUI.Button.CreateSimpleButton(`spellBtn_${index}`, spell.name);
+    button.width = "100px";
+    button.height = "60px";
+    button.color = "white";
+    button.background = "#2a2a2a";
+    button.cornerRadius = 8;
+    button.thickness = 2;
+    button.fontSize = 14;
+    button.paddingLeft = "4px";
+    button.paddingRight = "4px";
+    button.zIndex = 10;
 
-  // Animation pulsante sur la couleur du bouton pendant cooldown
-  let pulseAnimationId = null;
-
-  function startPulseAnimation() {
-    let pulseDirection = 1;
-    let pulseValue = 0.3; // entre 0 et 0.3
-
-    const animatePulse = () => {
-      pulseValue += 0.01 * pulseDirection;
-      if (pulseValue >= 0.3) pulseDirection = -1;
-      if (pulseValue <= 0) pulseDirection = 1;
-
-      const baseColor = new BABYLON.Color3(0, 0, 0.5);
-      const pulseColor = new BABYLON.Color3(
-        baseColor.r + pulseValue,
-        baseColor.g + pulseValue,
-        baseColor.b + pulseValue
-      );
-      button.background = pulseColor.toHexString();
-
-      pulseAnimationId = requestAnimationFrame(animatePulse);
-    };
-    animatePulse();
-  }
-
-  function stopPulseAnimation() {
-    if (pulseAnimationId) {
-      cancelAnimationFrame(pulseAnimationId);
-      pulseAnimationId = null;
-    }
-    button.background = "darkblue";
-  }
-
-  // Fonction pour lancer cooldown visuel (durée en ms)
-  function startCooldown(duration) {
-    cooldownOverlay.width = "80px";
-    let start = performance.now();
-
-    startPulseAnimation();
-    button.isEnabled = false;
-    button.alpha = 0.6;
-
-    const animate = () => {
-      let elapsed = performance.now() - start;
-      let progress = Math.min(elapsed / duration, 1);
-      cooldownOverlay.width = 80 * (1 - progress) + "px";
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        cooldownOverlay.width = "0px";
-        stopPulseAnimation();
-        button.isEnabled = true;
-        button.alpha = 1;
+    button.onPointerUpObservable.add(() => {
+      console.log(`Casting ${spell.name}`);
+      if (spell.selectTarget) {
+        spell.selectTarget();
       }
-    };
+    });
 
-    animate();
-  }
-
-  // Quand on clique sur le bouton
-  button.onPointerUpObservable.add(() => {
-    callback();
-    if (cooldown > 0) {
-      startCooldown(cooldown);
-    }
+    spellBar.addControl(button);
   });
 
-  return button;
+  return spellBar;
 }

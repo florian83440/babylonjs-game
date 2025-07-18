@@ -10,6 +10,7 @@ export function setupCamera(scene, canvas, targetMesh) {
     scene
   );
   camera.attachControl(canvas, true);
+  camera.detachControl()
 
   scene.registerBeforeRender(() => {
     camera.target = targetMesh.position;

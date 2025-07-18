@@ -2,7 +2,8 @@ import * as BABYLON from "babylonjs";
 import playerClasses from "@/data/playerClasses.json";
 import { Spell } from "./Spell";
 import { SpellManager } from "./SpellManager";
-import store from "@/store"; // Import the Vuex store
+import store from "@/store";
+import { setSpellsGUI } from "@/babylon/gui/spellButtons.js";
 
 export class Player {
   constructor(scene, offset, startX = 1, startZ = 1, enemyManager, guiTexture, playerManager) {
@@ -98,6 +99,7 @@ export class Player {
           })
       );
       this.spellManager.setSpells(spells);
+      setSpellsGUI(this.guiTexture, this.spellManager);
       this.onManaChange();
     } else {
       console.error(`playerStore class "${className}" not found.`);

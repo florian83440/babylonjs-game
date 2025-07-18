@@ -1,5 +1,4 @@
 import * as BABYLON from "babylonjs";
-import { addSpellButton } from "@/babylon/gui/spellButtons.js";
 import { DamageCalculator } from "./DamageCalculator";
 
 export class Spell {
@@ -41,8 +40,6 @@ export class Spell {
     this.onlySelfCast = onlySelfCast;
     this.itemBuff = itemBuff || {}; // Store the item buff
     this.damageCalculator = new DamageCalculator();
-
-    this.createUI();
   }
 
   getSpellColor(type) {
@@ -58,18 +55,6 @@ export class Spell {
       default: // Bleu par défaut
         return new BABYLON.Color3(0.3, 0.3, 1);
     }
-  }
-
-  createUI() {
-    addSpellButton(
-      this.guiTexture,
-      this.name,
-      this.offset,
-      () => {
-        this.selectTarget();
-      },
-      this.cooldown
-    );
   }
 
   selectTarget() {

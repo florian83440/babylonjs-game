@@ -37,9 +37,9 @@ const mutations = {
   },
   setPlayerClassData(state, playerData) {
     state.class_HP = playerData.HP;
-    state.class_maxHP = playerData.maxHP;
+    state.class_maxHP = playerData.HP;
     state.class_MP = playerData.MP;
-    state.class_maxMP = playerData.maxMP;
+    state.class_maxMP = playerData.MP;
   },
   setLevel(state, level) {
     state.level = level;

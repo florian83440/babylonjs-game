@@ -41,8 +41,9 @@ export function createScene(engine, canvas) {
   // Create GUI elements
   createHPBar(advancedTexture);
   createManaBar(advancedTexture);
+  createPlayerInfoGUI(advancedTexture, playerManager, enemyManager);
 
-  createCurrentTurnInfos(advancedTexture);
+  //createCurrentTurnInfos(advancedTexture);
 
   createInventoryUI(advancedTexture, (item) => {
     console.log(`Used item from inventory: ${item.name}`);

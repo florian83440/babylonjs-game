@@ -37,6 +37,8 @@ export function createManaBar(guiTexture) {
 
   function updateManaBar() {
     const manaPercentage = (MP / maxMP) * 100;
+    console.log(MP);
+    console.log(maxMP);
     manaBar.width = `${manaPercentage}%`;
     manaLabel.text = `${MP}`;
   }

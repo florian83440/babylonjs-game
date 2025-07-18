@@ -9,10 +9,10 @@ export function createPlayerInfoGUI(guiTexture) {
   playerInfoContainer.color = "White";
   playerInfoContainer.thickness = 2;
   playerInfoContainer.background = "Black";
-  playerInfoContainer.top = "-70px";
+  playerInfoContainer.top = "15px";
   playerInfoContainer.left = "-15px";
   playerInfoContainer.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-  playerInfoContainer.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+  playerInfoContainer.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
   const nameLabel = new GUI.TextBlock();
   nameLabel.text = `Name: ${store.state.playerStore.name}`;
